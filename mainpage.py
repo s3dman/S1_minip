@@ -1,9 +1,12 @@
 import dearpygui.dearpygui as dpg
+import config
 
-W,H = 1280,720
+import loginpage
+
 
 def mainpage():
-    with dpg.window(tag="window2",width=W, height=H, no_resize=True , no_move=False, no_close=True, no_collapse=True):
-        pass
-        # dpg.add_date_picker()
-    dpg.set_primary_window('window2',True)
+    with dpg.window(tag="mainpage",width=config.W, height=config.H, no_resize=True , no_move=False, no_close=True, no_collapse=True):
+        dpg.add_text("this is the mainpage")
+        dpg.add_button(label="go to loginpage",callback=lambda:
+                       config.window_handler("mainpage",loginpage.loginpage))
+    dpg.set_primary_window('mainpage',True)
