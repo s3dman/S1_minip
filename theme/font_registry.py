@@ -1,5 +1,9 @@
 import dearpygui.dearpygui as dpg
 
-with dpg.font_registry() as main_font_registry:
-    f1 = dpg.add_font("../assets/JetBrainsMono/JetBrainsMono-Bold.ttf", 20)
+JBM = {}
 
+def font_init():
+    global JBM
+    with dpg.font_registry():
+        for i in range(10,26,5):
+            JBM[i] = dpg.add_font("./assets/JetBrainsMono/JetBrainsMono-Bold.ttf", i)

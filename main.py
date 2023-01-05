@@ -1,18 +1,21 @@
 import dearpygui.dearpygui as dpg
-
-import mainpage
-
-dpg.create_context()
 import config
 
-dpg.bind_font(f1)
-dpg.show_font_manager()
+
+dpg.create_context()
+dpg.create_viewport(title='minip', width=config.W, height=config.H)
+
+# create viewport then import registries
+import theme
+theme.font_registry.font_init()
+
 # ====================================================
 
-# calling mainpage
-mainpage.mainpage()
+import loginpage
+loginpage.loginpage()
+
 # ====================================================
-dpg.create_viewport(title='minip', width=config.W, height=config.H)
+
 dpg.setup_dearpygui()
 
 dpg.show_viewport()

@@ -1,2 +1,2 @@
-from font_registry import *
-from theme_registry import *
+import theme.font_registry
+import theme.theme_registry

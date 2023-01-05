@@ -1,4 +1,6 @@
 import dearpygui.dearpygui as dpg
+# from main import font_registry
+
 
 W,H = 1280,720
 
