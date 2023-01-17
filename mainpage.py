@@ -4,16 +4,19 @@ import theme
 
 import loginpage
 
-def mainpage():
-    ui = { "l":{}, "b":{} }
 
-    with dpg.window(tag="mainpage",width=config.W, height=config.H, no_resize=True , no_move=False, no_close=True, no_collapse=True):
-        ui['b']['loginpage'] = dpg.add_button(label="go to loginpage",callback=lambda:
-                       config.window_handler("mainpage",loginpage.loginpage))
-        with dpg.group(horizontal=True) as x:
+def mainpage():
+    ui = { "l":{}, "b":{}, "i":{}}
+
+    with dpg.group(tag='mainpage',parent='main'):
+
+        with dpg.group(tag='bruh'):
             ui['l']['a'] = dpg.add_text("this is text1")
-            ui['l']['b'] = dpg.add_text("this may be text2")
-            ui['l']['c'] = dpg.add_text("text3")
+            ui['b']['loginpage'] = dpg.add_button(label="go to loginpage",callback=lambda:
+                           config.window_handler("mainpage",loginpage.loginpage))
+
+        ui['i']['input'] = dpg.add_input_text(width=200)
+
+
+        config.ui_center('bruh',2,0.5,0.5)
         dpg.bind_item_font(ui['b']['loginpage'],theme.font_registry.JBM[25])
-        config.ui_center(None,x)
-    dpg.set_primary_window('mainpage',True)
