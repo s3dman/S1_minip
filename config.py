@@ -3,10 +3,17 @@ import dearpygui.dearpygui as dpg
 W,H = 1280,720
 counter = 0
 
-def window_handler(wdt,wcf):
-    dpg.delete_item()
+def window_handler(wdt,wcf,sg):
+    for i in sg['l']:
+        dpg.delete_item(sg['l'][i])
+    for i in sg['b']:
+        dpg.delete_item(sg['b'][i])
+    for i in sg['i']:
+        dpg.delete_item(sg['i'][i])
+    # for i in sg['g']:
+    #     dpg.delete_item(sg['g'][i])
     dpg.delete_item(wdt)
-    wcf()
+    # wcf()
 
 def ui_center(item, alignment_type: int, x_align: float = 0.5, y_align: float = 0.5):
     def _center_h(_s, _d, data):
