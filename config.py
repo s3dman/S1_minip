@@ -3,17 +3,11 @@ import dearpygui.dearpygui as dpg
 W,H = 1280,720
 counter = 0
 
-def window_handler(wdt,wcf,sg):
-    for i in sg['l']:
-        dpg.delete_item(sg['l'][i])
-    for i in sg['b']:
-        dpg.delete_item(sg['b'][i])
-    for i in sg['i']:
-        dpg.delete_item(sg['i'][i])
-    # for i in sg['g']:
-    #     dpg.delete_item(sg['g'][i])
+def window_handler(wdt,wcf,hr):
+    for i in hr:
+        dpg.set_item_callback(i,lambda: None)
     dpg.delete_item(wdt)
-    # wcf()
+    wcf()
 
 def ui_center(item, alignment_type: int, x_align: float = 0.5, y_align: float = 0.5):
     def _center_h(_s, _d, data):
@@ -27,7 +21,7 @@ def ui_center(item, alignment_type: int, x_align: float = 0.5, y_align: float = 
         dpg.set_item_pos(data[0], [dpg.get_item_pos(data[0])[0], newY])
 
     if 0 <= alignment_type <= 2:
-        with dpg.item_handler_registry():
+        with dpg.item_handler_registry() as a:
             if alignment_type == 0:
                 # horizontal only alignment
                 dpg.add_item_visible_handler(callback=_center_h, user_data=[item, x_align])
@@ -38,6 +32,5 @@ def ui_center(item, alignment_type: int, x_align: float = 0.5, y_align: float = 
                 # both horizontal and vertical alignment
                 dpg.add_item_visible_handler(callback=_center_h, user_data=[item, x_align])
                 dpg.add_item_visible_handler(callback=_center_v, user_data=[item, y_align])
-
-        
         dpg.bind_item_handler_registry(item, dpg.last_container())
+        return dpg.get_item_children(a,slot=1)
