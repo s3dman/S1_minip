@@ -16,9 +16,9 @@ dpg.bind_font(theme.font_registry.JBM[20])
 
 # ====================================================
 
-import mainpage
+import loginpage
 with dpg.window(tag="main",width=config.W, height=config.H, no_resize=True , no_move=False, no_close=True, no_collapse=True):
-    mainpage.mainpage()
+    loginpage.loginpage()
 dpg.set_primary_window('main',True)
 
 
