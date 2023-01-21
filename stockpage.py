@@ -25,11 +25,12 @@ def stockpage():
         with dpg.group(tag='title'):
             ui['l']['stockname'] = dpg.add_text(db[stock])
         with dpg.group(tag='graph'):
-            date,open,high,low,close = data_fetch.stock_range_fetch(stock,"2011-01-01","2023-01-01","1mo")
-            with dpg.plot(width=1000,height=250):
-                dpg.add_plot_axis(dpg.mvXAxis,tag='xaxis')
-                dpg.add_plot_axis(dpg.mvYAxis,tag='yaxis')
-                dpg.add_candle_series(dates=date,opens=open,highs=high,closes=close,lows=low,parent='yaxis')
+            date,open,high,low,close = data_fetch.stock_history_period(stock,"1d","1m")
+            with dpg.plot(width=1250,height=250):
+                dpg.add_plot_axis(dpg.mvXAxis,tag='xaxis',time=True)
+                dpg.add_plot_axis(dpg.mvYAxis,label="USD",tag='yaxis')
+                dpg.set_axis_limits('xaxis',ymax=date[-1],ymin=date[0])
+                dpg.add_candle_series(dates=date,opens=open,highs=high,closes=close,lows=low,parent='yaxis',time_unit=dpg.mvTimeUnit_Hr)
 
 
     ui['g'] += config.ui_center('topbar',0)
