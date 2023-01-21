@@ -2,7 +2,6 @@ import dearpygui.dearpygui as dpg
 import config
 import theme
 import authentication
-import time
 
 import mainpage
 
