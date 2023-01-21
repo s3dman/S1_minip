@@ -14,7 +14,7 @@ def stock_range_fetch(stock,info,start,stop,interval):
     ticker=yfinance.Ticker(stock)
     history=ticker.history(interval=interval,start=start,end=stop)
     x = dict(history[info])
-    for i in x:
-        print(i.to_pydatetime(),x[i])
+    return x
+        # i.to_pydatetime(),x[i])
 
 x = stock_range_fetch("MSFT","High","2022-01-01","2023-01-01","1mo")

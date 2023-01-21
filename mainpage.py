@@ -5,6 +5,8 @@ import local_dh
 from difflib import SequenceMatcher
 import loginpage 
 import stockpage
+import settingspage
+import portfoliopage
 
 
 ui = {"g":[], "l":{}, "b":{}, "i":{}}
@@ -26,16 +28,20 @@ def mainpage():
                     similar.append(i)
             temp_db=similar
         dpg.add_table_column(parent='stocktable')
-        for i in temp_db:
+        if len(temp_db) == 0:
             with dpg.table_row(parent='stocktable'):
-                ui['b'][i[0]] = dpg.add_button(label=f"{i[0]} : {i[1]}",width=1000,callback=stockpage.page_handler)
+                dpg.add_text("No results found!")
+        else:
+            for i in temp_db:
+                with dpg.table_row(parent='stocktable'):
+                    ui['b'][i[0]] = dpg.add_button(label=f"{i[0]} : {i[1]}",width=1000,callback=stockpage.page_handler)
 
 
     with dpg.group(tag='mainpage',parent='main'):
         with dpg.group(tag='topbar',horizontal=True,horizontal_spacing=5):
             ui['b']['logout'] = dpg.add_button(label="Logout",width=420,callback=lambda: config.window_handler("mainpage",loginpage.loginpage,ui['g']))
-            ui['b']['portfolio'] = dpg.add_button(label="Portfolio",width=420,callback=lambda: config.window_handler("mainpage",loginpage.loginpage,ui['g']))
-            ui['b']['settings'] = dpg.add_button(label="Settings",width=420,callback=lambda: config.window_handler("mainpage",loginpage.loginpage,ui['g']))
+            ui['b']['portfolio'] = dpg.add_button(label="Portfolio",width=420,callback=lambda: config.window_handler("mainpage",portfoliopage.portfoliopage,ui['g']))
+            ui['b']['settings'] = dpg.add_button(label="Settings",width=420,callback=lambda: config.window_handler("mainpage",settingspage.settingspage,ui['g']))
 
         with dpg.group(tag='searchbar'):
             ui['i']['searchbar'] = dpg.add_input_text(hint="Search:",width=500,on_enter=True,callback=tablesearch)
