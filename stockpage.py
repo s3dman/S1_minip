@@ -3,16 +3,14 @@ import config
 import theme
 import local_dh
 
-stock = None
-
-def page_handler(wdt,s,hr):
-    global stock
-    stock = s
-    config.window_handler(wdt,stockpage,hr)
+# stock 
+# def page_handler(sender):
+#     global stock
+#     stock = str(dpg.get_item_label(sender)).split()[0]
+#     config.window_handler("mainpage",stockpage,)
 
 def stockpage():
 
-    print(stock)
     db = local_dh.SymbolGet()
 
     ui = {"g":[], "l":{}, "b":{}, "i":{}}

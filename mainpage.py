@@ -27,7 +27,7 @@ def mainpage():
         dpg.add_table_column(parent='stocktable')
         for i in temp_db:
             with dpg.table_row(parent='stocktable'):
-                dpg.add_button(label=f"{i[0]} : {i[1]}",width=1000,callback=lambda: stockpage.page_handler("mainpage",i[0],ui['g']))
+                ui['b'][i[0]] = dpg.add_button(label=f"{i[0]} : {i[1]}",width=1000,callback=stockpage.page_handler)
 
 
     with dpg.group(tag='mainpage',parent='main'):
