@@ -1,6 +1,6 @@
 import yfinance 
-import plotly.graph_objects as go
-import plotly.express as px
+# import plotly.graph_objects as go
+# import plotly.express as px
 
 import datetime
 a=datetime.date.today()
@@ -12,6 +12,8 @@ s=input('enter stock name:')
 
 tata=yfinance.Ticker(s)
 hist=tata.history(interval=i,start=sta,end=stp)
+print(hist)
+
 # print(hist.head())
 
 # df=px.data.iris()
@@ -20,7 +22,7 @@ hist=tata.history(interval=i,start=sta,end=stp)
 
 
 
-fig=go.Figure(data=go.Scatter(x=hist.index,y=hist[t],mode='lines+markers',xaxis="timeline",yaxis="High"))
-fig.show()  
-
-
+# fig=go.Figure(data=go.Scatter(x=hist.index,y=hist[t],mode='lines+markers',xaxis="timeline",yaxis="High"))
+# fig.show()  
+#
+#

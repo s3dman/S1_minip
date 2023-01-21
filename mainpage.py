@@ -7,8 +7,9 @@ import loginpage
 import stockpage
 
 
+ui = {"g":[], "l":{}, "b":{}, "i":{}}
+
 def mainpage():
-    ui = {"g":[], "l":{}, "b":{}, "i":{}}
 
     db = local_dh.SymbolGet().items()
 
