@@ -39,9 +39,9 @@ def mainpage():
 
     with dpg.group(tag='mainpage',parent='main'):
         with dpg.group(tag='topbar',horizontal=True,horizontal_spacing=5):
-            ui['b']['logout'] = dpg.add_button(label="Logout",width=420,callback=lambda: config.window_handler("mainpage",loginpage.loginpage,ui['g']))
-            ui['b']['portfolio'] = dpg.add_button(label="Portfolio",width=420,callback=lambda: config.window_handler("mainpage",portfoliopage.portfoliopage,ui['g']))
-            ui['b']['settings'] = dpg.add_button(label="Settings",width=420,callback=lambda: config.window_handler("mainpage",settingspage.settingspage,ui['g']))
+            ui['b']['logout'] = dpg.add_button(label="Logout",width=410,callback=lambda: config.window_handler("mainpage",loginpage.loginpage,ui['g']))
+            ui['b']['portfolio'] = dpg.add_button(label="Portfolio",width=410,callback=lambda: config.window_handler("mainpage",portfoliopage.portfoliopage,ui['g']))
+            ui['b']['settings'] = dpg.add_button(label="Settings",width=410,callback=lambda: config.window_handler("mainpage",settingspage.settingspage,ui['g']))
 
         with dpg.group(tag='searchbar'):
             ui['i']['searchbar'] = dpg.add_input_text(hint="Search:",width=500,on_enter=True,callback=tablesearch)
