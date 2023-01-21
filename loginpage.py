@@ -27,7 +27,7 @@ def loginpage():
                 ui['i']['username'] = dpg.add_input_text(width=200)
             with dpg.group(horizontal=True):
                 ui["l"]["password"] = dpg.add_text("Password:")
-                ui['i']['password'] = dpg.add_input_text(width=200,password=True)
+                ui['i']['password'] = dpg.add_input_text(width=200,password=True,on_enter=True,callback=login_parser)
         with dpg.group(tag='login_register_buttons',horizontal=True):
             ui["b"]["register"] = dpg.add_button(label="Register",width=100,height=50,
                 callback=lambda: config.window_handler("loginpage",registerpage,ui['g']))

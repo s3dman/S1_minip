@@ -1,21 +1,48 @@
 import dearpygui.dearpygui as dpg
 import config
 import theme
-
-import loginpage
+import local_dh
+from difflib import SequenceMatcher
+import loginpage 
+import stockpage
 
 
 def mainpage():
     ui = {"g":[], "l":{}, "b":{}, "i":{}}
 
+    db = local_dh.SymbolGet().items()
+
+    def tablesearch():
+        dpg.delete_item(item="stocktable",children_only=True)
+        val = dpg.get_value(ui['i']['searchbar'])
+
+        if val == "":
+            temp_db = db
+        else:
+            similar = []
+            for i in db:
+                if SequenceMatcher(None,val.lower(),i[1].lower()).ratio() >= 0.5 or val.lower() == i[0].lower():
+                    similar.append(i)
+            temp_db=similar
+        dpg.add_table_column(parent='stocktable')
+        for i in temp_db:
+            with dpg.table_row(parent='stocktable'):
+                dpg.add_button(label=f"{i[0]} : {i[1]}",width=1000,callback=lambda: stockpage.page_handler("mainpage",i[0],ui['g']))
+
+
     with dpg.group(tag='mainpage',parent='main'):
-        ui['b']['loginpage'] = dpg.add_button(label="go to loginpage",callback=lambda:
-                       config.window_handler("mainpage",loginpage.loginpage,ui['g']))
-        with dpg.group(tag='temp1'):
-            with dpg.table(borders_outerH=True,borders_outerV=True,width=1000,height=600,header_row=False,scrollY=True):
-                dpg.add_table_column()
-                for i in range(150):
-                    with dpg.table_row():
-                        dpg.add_button(label=f"Buttom: {i}",width=1000)
-        ui['g'] += config.ui_center('temp1',2)
-        dpg.bind_item_font(ui['b']['loginpage'],theme.font_registry.JBM[25])
+        with dpg.group(tag='topbar',horizontal=True,horizontal_spacing=5):
+            ui['b']['logout'] = dpg.add_button(label="Logout",width=420,callback=lambda: config.window_handler("mainpage",loginpage.loginpage,ui['g']))
+            ui['b']['portfolio'] = dpg.add_button(label="Portfolio",width=420,callback=lambda: config.window_handler("mainpage",loginpage.loginpage,ui['g']))
+            ui['b']['settings'] = dpg.add_button(label="Settings",width=420,callback=lambda: config.window_handler("mainpage",loginpage.loginpage,ui['g']))
+
+        with dpg.group(tag='searchbar'):
+            ui['i']['searchbar'] = dpg.add_input_text(hint="Search:",width=500,on_enter=True,callback=tablesearch)
+        with dpg.group(tag='stocktablegroup'):
+            with dpg.table(tag='stocktable',borders_outerH=True,borders_outerV=True,width=1000,height=550,header_row=False,scrollY=True):
+                tablesearch()
+        ui['g'] += config.ui_center('topbar',0)
+        ui['g'] += config.ui_center('searchbar',2,y_align=0.1)
+        ui['g'] += config.ui_center('stocktablegroup',2,y_align=0.7)
+        dpg.bind_item_font(ui['i']['searchbar'],theme.font_registry.JBM[25])
+        dpg.bind_item_font('topbar',theme.font_registry.JBM[25])

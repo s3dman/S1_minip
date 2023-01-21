@@ -15,3 +15,7 @@ def ReadDB(file):
 def initialize():
     db = {'users':{}}
     WriteDB(db,"DATABASE.DB")
+
+def SymbolGet():
+    db = ReadDB("DATABASE.DB")['symbols']
+    return db
