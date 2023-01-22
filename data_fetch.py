@@ -18,7 +18,13 @@ def stock_history_period(stock,period,interval):
     return dates,list(history["Open"]),list(history["High"]),list(history["Low"]),list(history["Close"])
 
 def stock_info(stock):
-    #should return info (as a dictionary ideally)
-    pass
-
-# print(stock_info("MSFT"))
+    ticker = yfinance.Ticker(stock)
+    x = ticker.info
+    if x == None:
+        return -1
+    d = {}
+    for i in x:
+        if x[i] == None:
+            continue
+        d[i.title()] = x[i]
+    return d

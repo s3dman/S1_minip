@@ -24,7 +24,7 @@ def mainpage():
         else:
             similar = []
             for i in db:
-                if SequenceMatcher(None,val.lower(),i[1].lower()).ratio() >= 0.5 or val.lower() == i[0].lower():
+                if SequenceMatcher(None,val.lower(),i[1].lower()).ratio() >= 0.4 or val.lower() == i[0].lower():
                     similar.append(i)
             temp_db=similar
         dpg.add_table_column(parent='stocktable')
