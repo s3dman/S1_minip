@@ -31,10 +31,22 @@ def stockpage():
                 dpg.add_plot_axis(dpg.mvYAxis,label="USD",tag='yaxis')
                 dpg.set_axis_limits('xaxis',ymax=date[-1],ymin=date[0])
                 dpg.add_candle_series(dates=date,opens=open,highs=high,closes=close,lows=low,parent='yaxis',time_unit=dpg.mvTimeUnit_Hr)
-
+        with dpg.group(tag="periods",horizontal=True,horizontal_spacing=5):
+            dpg.add_button(label="1d",width=105)
+            dpg.add_button(label="5d",width=105)
+            dpg.add_button(label="1m",width=105)
+            dpg.add_button(label="3m",width=105)
+            dpg.add_button(label="6m",width=105)
+            dpg.add_button(label="1y",width=105)
+            dpg.add_button(label="2y",width=105)
+            dpg.add_button(label="5y",width=105)
+            dpg.add_button(label="10y",width=105)
+            dpg.add_button(label="ytd",width=105)
+            dpg.add_button(label="max",width=105)
 
     ui['g'] += config.ui_center('topbar',0)
     ui['g'] += config.ui_center('title',0)
     ui['g'] += config.ui_center('graph',0)
+    ui['g'] += config.ui_center('periods',0)
     dpg.bind_item_font(ui['l']['stockname'],theme.font_registry.JBM[25])
     dpg.bind_item_font('topbar',theme.font_registry.JBM[25])
