@@ -23,24 +23,13 @@ def stock_info(stock):
     if x == None:
         return -1
     d = {}
+    v = "Currentprice Volume".split()
     for i in x:
+        if i not in v:
+            continue
         if x[i] == None:
             continue
         d[i.title()] = x[i]
     return d
 
-def bruh():
-	x = stock_info("MSFT")
-	for i in x:
-		print(i)
-
-	d = {}
-
-	v = "Currentprice Volune".split()
-
-	for i in v:
-		d[i] = x[i]
-	from pprint import pprint
-	pprint(d)
-
-bruh()
+stock_info("MSFT")

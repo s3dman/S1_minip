@@ -1,1 +1,2 @@
-- add spacing in horizontal group
+- symbolgetfunction update
+- stock data download and store
