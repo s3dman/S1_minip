@@ -20,15 +20,11 @@ def SymbolGet():
     db = ReadDB("STOCKLIST.DB")
     return db
 
-v = {}
-def temp():
-    for i in "MSFT AAPL".split():
-        global v
-        ticker = yfinance.Ticker(i)
-        x = dict(ticker.info)
-        x["Name"] = SymbolGet()[i]
-        v[i] = x
-
-temp()
-from pprint import pprint
-pprint(v)
+# v = {}
+# def data_storer():
+#     for i in "MSFT AAPL".split():
+#         global v
+#         ticker = yfinance.Ticker(i)
+#         x = dict(ticker.info)
+#         # x["Name"] = SymbolGet()[i]
+#         v[i] = x

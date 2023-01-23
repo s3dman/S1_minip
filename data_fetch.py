@@ -17,19 +17,31 @@ def stock_history_period(stock,period,interval):
         return -1
     return dates,list(history["Open"]),list(history["High"]),list(history["Low"]),list(history["Close"])
 
+# def stock_info(stock):
+#     ticker = yfinance.Ticker(stock)
+#     x = ticker.info
+#     if x == None:
+#         return -1
+#     d = {}
+#     v = "Currentprice Volume".split()
+#     for i in x:
+#         if i not in v:
+#             continue
+#         if x[i] == None:
+#             continue
+#         d[i.title()] = x[i]
+#     return d
+
 def stock_info(stock):
     ticker = yfinance.Ticker(stock)
-    x = ticker.info
-    if x == None:
-        return -1
-    d = {}
-    v = "Currentprice Volume".split()
-    for i in x:
-        if i not in v:
-            continue
-        if x[i] == None:
-            continue
-        d[i.title()] = x[i]
-    return d
+    x = dict(ticker.info)
+    v = {}
+    v["Current Price"] = f'${x["currentPrice"]}'
+    v["Previous Close"] = f'{x["previousClose"]}'
+    v["Day Range"] = f'${x["dayLow"]} - ${x["dayHigh"]}'
+    v["Year Range"] = f'${x["fiftyTwoWeekLow"]} - ${x["fiftyTwoWeekHigh"]}'
+    v["Market Cap"] = f'{int(x["marketCap"])/1e6:.3f}M USD'
+    v["Volume"] = f'{int(x["volume"])/1e3:.3f}K'
+    v["Summary"] = x['longBusinessSummary']
+    return v
 
-stock_info("MSFT")

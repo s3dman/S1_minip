@@ -29,14 +29,20 @@ def graph_print():
 
 
 def info_print():
-    temp = list(data_fetch.stock_info(stock).items())
+    temp = data_fetch.stock_info(stock)
     with dpg.group(parent="infotablegroup"):
-        for i in range(0,len(temp),2):
-            dpg.add_text(f"{temp[i][0]} : {temp[i][1]}")
-    with dpg.group(parent="infotablegroup"):
-        for i in range(1,len(temp),2):
-            dpg.add_text(f"{temp[i][0]} : {temp[i][1]}")
-
+        dpg.add_spacer(height=10)
+        for i in temp:
+            if i == 'Summary':
+                continue
+            dpg.add_text(f"{i} : {temp[i]}")
+    dpg.add_spacer(parent='infotablegroup',width=50)
+    with dpg.group(parent='infotablegroup'):
+        dpg.add_spacer(height=10)
+        with dpg.table(tag='summary',borders_outerH=True,borders_outerV=True,width=800,height=170,header_row=False,scrollY=True):
+            dpg.add_table_column()
+            with dpg.table_row():
+                dpg.add_text(temp["Summary"],wrap=800)
 
 def stockpage():
     db = local_dh.SymbolGet()
