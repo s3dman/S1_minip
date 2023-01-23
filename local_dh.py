@@ -20,6 +20,11 @@ def SymbolGet():
     db = ReadDB("STOCKLIST.DB")
     return db
 
+def userDataStore(user,data):
+    db = ReadDB("USERDATA.DB")
+    db[user] = data
+    WriteDB(db,"USERDATA.DB")
+
 # v = {}
 # def data_storer():
 #     for i in "MSFT AAPL".split():
