@@ -32,13 +32,9 @@ def info_print():
     temp = list(data_fetch.stock_info(stock).items())
     with dpg.group(parent="infotablegroup"):
         for i in range(0,len(temp),2):
-            if temp[i][0] == "Longbusinesssummary":
-                continue
             dpg.add_text(f"{temp[i][0]} : {temp[i][1]}")
     with dpg.group(parent="infotablegroup"):
         for i in range(1,len(temp),2):
-            if temp[i][0] == "Longbusinesssummary":
-                continue
             dpg.add_text(f"{temp[i][0]} : {temp[i][1]}")
 
 

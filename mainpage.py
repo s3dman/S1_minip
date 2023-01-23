@@ -7,6 +7,7 @@ import loginpage
 import stockpage
 import settingspage
 import portfoliopage
+import multithread
 
 
 ui = {"g":[], "l":{}, "b":{}, "i":{}}
@@ -47,7 +48,7 @@ def mainpage():
             ui['i']['searchbar'] = dpg.add_input_text(hint="Search:",width=500,on_enter=True,callback=tablesearch)
         with dpg.group(tag='stocktablegroup'):
             with dpg.table(tag='stocktable',borders_outerH=True,borders_outerV=True,width=1000,height=550,header_row=False,scrollY=True):
-                tablesearch()
+                multithread.run_parallel(tablesearch)
         ui['g'] += config.ui_center('topbar',0)
         ui['g'] += config.ui_center('searchbar',2,y_align=0.1)
         ui['g'] += config.ui_center('stocktablegroup',2,y_align=0.7)
