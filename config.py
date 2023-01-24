@@ -1,15 +1,16 @@
 import dearpygui.dearpygui as dpg
 
-W,H = 1280,720
-counter = 0
+W,H=1280,720
 
-def window_handler(wdt,wcf,hr):
+def window_handler(wdt,wcf,hr,popup=False):
     for i in hr:
         dpg.set_item_callback(i,lambda: None)
     dpg.delete_item(wdt)
-    wcf()
+    if not popup:
+        wcf()
 
-def ui_center(item, alignment_type: int, x_align: float = 0.5, y_align: float = 0.5):
+
+def ui_center(item, alignment_type: int, x_align: float = 0.5, y_align: float = 0.5,W=1280,H=720):
     def _center_h(_s, _d, data):
         width = dpg.get_item_rect_size(data[0])[0]
         newX = (W // 2 - width // 2) * data[1] * 2

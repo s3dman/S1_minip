@@ -1,9 +1,12 @@
 import local_dh
 
+curr_username,curr_password = None,None
 def Login(username,password):
     database = local_dh.ReadDB('DATABASE.DB')
     if username in database['users']:
         if password == Decoder(database['users'][username]):
+            global curr_username,curr_password
+            curr_username,curr_password=username,database['users'][username]
             return 0
         return -1
     return -2
