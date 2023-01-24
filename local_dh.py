@@ -20,7 +20,14 @@ def SymbolGet():
     db = ReadDB("STOCKLIST.DB")
     return db
 
-def userDataStore(user,data):
+def userDataRead(user):
+    db = ReadDB("USERDATA.DB")
+    if user in db:
+        return db[user]
+    return []
+
+
+def userDataWrite(user,data):
     db = ReadDB("USERDATA.DB")
     db[user] = data
     WriteDB(db,"USERDATA.DB")
@@ -33,3 +40,4 @@ def userDataStore(user,data):
 #         x = dict(ticker.info)
 #         # x["Name"] = SymbolGet()[i]
 #         v[i] = x
+
