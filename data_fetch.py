@@ -9,13 +9,17 @@ def SymbolGetdh():
     data_json = json.loads(response.read())
     return data_json
 
-def stock_history_period(stock,period,interval):
+def stock_history_period(stock,period,interval,dateget=True):
     ticker=yfinance.Ticker(stock)
     history=ticker.history(interval=interval,period=period)
-    dates = [i.timestamp() for i in list(history.index)]
-    if len(dates) == 0:
-        return -1
-    return dates,list(history["Open"]),list(history["High"]),list(history["Low"]),list(history["Close"])
+    if dateget:
+        dates = [i.timestamp() for i in list(history.index)]
+        if len(dates) == 0:
+            return -1
+        return dates,list(history["Open"]),list(history["High"]),list(history["Low"]),list(history["Close"])
+    else:
+        return list(history["Open"]),list(history["High"]),list(history["Low"]),list(history["Close"])
+
 
 # def stock_info(stock):
 #     ticker = yfinance.Ticker(stock)
@@ -37,7 +41,7 @@ def stock_info(stock):
     x = dict(ticker.info)
     v = {}
     v["Current Price"] = f'${x["currentPrice"]}'
-    v["Previous Close"] = f'{x["previousClose"]}'
+    v["Previous Close"] = f'${x["previousClose"]}'
     v["Day Range"] = f'${x["dayLow"]} - ${x["dayHigh"]}'
     v["Year Range"] = f'${x["fiftyTwoWeekLow"]} - ${x["fiftyTwoWeekHigh"]}'
     v["Market Cap"] = f'{int(x["marketCap"])/1e6:.3f}M USD'

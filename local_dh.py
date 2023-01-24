@@ -40,4 +40,3 @@ def userDataWrite(user,data):
 #         x = dict(ticker.info)
 #         # x["Name"] = SymbolGet()[i]
 #         v[i] = x
-

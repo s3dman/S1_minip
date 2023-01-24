@@ -41,16 +41,17 @@ def add_investment():
         qtyupdate(0)
         qty = dpg.get_value(ui['i']['qty'])
         if pricefetch(pset=False) == 0:
-            # user_data = local_dh.userDataRead(authentication.curr_username)
-            user_data = local_dh.userDataRead("Neville")
+            user_data = local_dh.userDataRead(authentication.curr_username)
             stockname = dpg.get_value(ui['i']['stockname'])
             price = dpg.get_value(ui['i']['price']) 
             if price == "" or int(float(price)) == 0:
                 pricefetch()
             price = dpg.get_value(ui['i']['price']) 
             user_data.append([stockname,int(qty),float(price)])
-            # local_dh.userDataWrite(authentication.curr_username,user_data)
-            local_dh.userDataWrite("Neville",user_data)
+            local_dh.userDataWrite(authentication.curr_username,user_data)
+            config.window_handler("popup",None,ui['g'],popup=True)
+            multithread.run_parallel(table_update)
+            multithread.run_parallel(graphupdate)
 
     with dpg.window(tag='popup',width=pW,height=pH,pos=(int(config.W/2-pW/2),int(config.H/2-pH/2)),no_collapse=True,no_move=True,no_title_bar=True,modal=True):
         dpg.add_spacer(height=7)
@@ -75,8 +76,75 @@ def add_investment():
     ui['g'] += config.ui_center('titlegroup',0,W=500,H=250)
     ui['g'] += config.ui_center('popupgroup',0,W=500,H=250)
 
-def portfoliopage():
+def graphupdate():
+    user_data = local_dh.userDataRead(authentication.curr_username)
+    if len(user_data) == 0:
+        return -1
+    date,open,high,low,close = data_fetch.stock_history_period(user_data[0][0],"6mo","1d")
+    for k in range(len(date)):
+        open[k] = int(open[k])*user_data[0][1]
+        high[k] *= int(high[k])*user_data[0][1]
+        low[k] *= int(low[k])*user_data[0][1]
+        close[k] *= int(close[k])*user_data[0][1]
+    for i in user_data[1:]:
+        t_open,t_high,t_low,t_close = data_fetch.stock_history_period(i[0],"6mo","1d",dateget=False)
+        for j in range(len(date)):
+            open[j] += int(t_open[j])*i[1]
+            high[j] += int(t_high[j])*i[1]
+            low[j] += int(t_low[j])*i[1]
+            close[j] += int(t_close[j])*i[1]
+    for k in range(len(close)):
+        close[k] /= 1e6
 
+    dpg.set_value('series',(date,close))
+    dpg.set_axis_limits_auto('xaxis')
+    dpg.set_axis_limits('xaxis',ymax=date[-1],ymin=date[0])
+    dpg.fit_axis_data('yaxis')
+
+def overallinfoupdate(ui):
+    user_data = local_dh.userDataRead(authentication.curr_username)
+    if len(user_data) == 0:
+        return -1
+    bprice,cprice,pcprice = 0,0,0
+    for i in user_data:
+        df = data_fetch.stock_info(i[0])
+        cprice += float(df["Current Price"][1:])*i[1]
+        pcprice += float(df["Previous Close"][1:])*i[1]
+        bprice += i[1]*i[2]
+    dgainp,tgainp = cprice-pcprice,cprice-bprice
+    dpg.set_value(ui['l']['daygain'],f"Day Gain/Loss: {dgainp:.3f}$ ({dgainp/bprice*100:.3f}%)")
+    dpg.set_value(ui['l']['totalgain'],f"Total Gain/Loss: {tgainp:.3f}$ ({tgainp/bprice*100:.3f}%)") 
+    dpg.set_value(ui['l']['numinvestments'],f"Investment's: {len(user_data)}")
+
+def delete_investment(source):
+    user_data = local_dh.userDataRead(authentication.curr_username)
+    index = dpg.get_item_user_data(source)
+    del user_data[index]
+    local_dh.userDataWrite(authentication.curr_username,user_data)
+    multithread.run_parallel(table_update)
+    multithread.run_parallel(graphupdate)
+
+def table_update():
+    dpg.delete_item('investmenttable',children_only=True)
+    dpg.add_table_column(parent='investmenttable',label="Stock")
+    dpg.add_table_column(parent='investmenttable',label="Quantity")
+    dpg.add_table_column(parent='investmenttable',label="Buy Price")
+    dpg.add_table_column(parent='investmenttable',label="",width=2,width_fixed=True)
+    user_data = local_dh.userDataRead(authentication.curr_username)
+    for i in range(len(user_data)):
+        with dpg.table_row(parent='investmenttable'):
+            for j in range(4):
+                with dpg.table_cell():
+                    if j == 2:
+                        dpg.add_text(f"${user_data[i][j]}")
+                    elif j == 3:
+                        dpg.add_button(label=f"-",user_data=i,callback=delete_investment)
+                    else:
+                        dpg.add_text(user_data[i][j])
+
+
+
+def portfoliopage():
     ui = {"g":[], "l":{}, "b":{}, "i":{}}
     with dpg.group(tag='portfoliopage',parent='main'):
         with dpg.group(tag='topbar',horizontal=True,horizontal_spacing=5):
@@ -87,15 +155,24 @@ def portfoliopage():
             ui['l']['portfolio'] = dpg.add_text(f"{authentication.curr_username}'s Portfolio")
         with dpg.group(tag='graph'):
             with dpg.plot(width=1250,height=400,anti_aliased=True):
-                dpg.add_plot_axis(dpg.mvXAxis,tag='xaxis',time=True)
-                dpg.add_plot_axis(dpg.mvYAxis,label="USD",tag='yaxis')
-        with dpg.group(tag='investment'):
-            ui['b']['addinvestment'] = dpg.add_button(label="Add Investment",callback=add_investment)
+                dpg.add_plot_axis(dpg.mvXAxis,tag='xaxis',time=True) 
+                dpg.add_plot_axis(dpg.mvYAxis,label="USD (Mil)",tag='yaxis')
+                dpg.add_line_series(x=[],y=[],parent='yaxis',tag='series')
+                multithread.run_parallel(graphupdate)
+        with dpg.group(tag='overallinfo',pos=(100,520)):
+            ui['l']['daygain'] = dpg.add_text("Day Gain:")
+            ui['l']['totalgain'] = dpg.add_text("Total Gain:")
+            ui['l']['numinvestments'] = dpg.add_text("Invesments:")
+            dpg.add_spacer(height=20)
+            ui['b']['addinvestment'] = dpg.add_button(label="Add Investment",width=200,callback=add_investment)
+            multithread.run_parallel(overallinfoupdate,ui)
+        with dpg.group(tag='investment',pos=(600,520)):
+            with dpg.table(tag='investmenttable',borders_outerH=True,borders_outerV=True,width=600,height=150,header_row=True,scrollY=True):
+                table_update()
 
     ui['g'] += config.ui_center('topbar',0)
     ui['g'] += config.ui_center('title',0)
     ui['g'] += config.ui_center('graph',0)
-    ui['g'] += config.ui_center('investment',0)
     dpg.bind_item_font(ui['l']['portfolio'],theme.font_registry.JBM[30])
     dpg.bind_item_font('topbar',theme.font_registry.JBM[25])
-    dpg.bind_item_font(ui['b']['addinvestment'],theme.font_registry.JBM[30])
+    dpg.bind_item_font(ui['b']['addinvestment'],theme.font_registry.JBM[25])
