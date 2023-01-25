@@ -40,23 +40,7 @@ def stock_history_period(stock,period,interval,dateget=True):
 #         d[i.title()] = x[i]
 #     return d
 
-def ftwlh(stock):
-    data = stock_history_period(stock,'1y','1d',dateget=False)
-    return  [min(data[-1]),max(data[-1])]
-
 def stock_info(stock,summary=True):
-    # ticker = yfinance.Ticker(stock)
-    # x = dict(ticker.info)
-    # v = {}
-    # v["Current Price"] = f'${x["currentPrice"]}'
-    # v["Previous Close"] = f'${x["previousClose"]}'
-    # v["Day Range"] = f'${x["dayLow"]} - ${x["dayHigh"]}'
-    # v["Year Range"] = f'${x["fiftyTwoWeekLow"]} - ${x["fiftyTwoWeekHigh"]}'
-    # v["Market Cap"] = f'{int(x["marketCap"])/1e6:.3f}M USD'
-    # v["Volume"] = f'{int(x["volume"])/1e3:.3f}K'
-    # v["Summary"] = x['longBusinessSummary']
-    # return v
-
     data = si.get_quote_table(stock)
     db = local_dh.SymbolGet()
     currentPrice = float(data['Open'])

@@ -18,8 +18,7 @@ def add_investment():
         if dpg.get_value(ui['i']['stockname']) in stocklist:
             dpg.set_value(ui['l']['status_info'],"")
             if pset:
-                dpg.set_value(ui['i']['price'],
-                    data_fetch.stock_info(dpg.get_value(ui['i']['stockname']))["Current Price"][1:],False)
+                dpg.set_value(ui['i']['price'], data_fetch.stock_info(dpg.get_value(ui['i']['stockname']),False)["Current Price"][1:])
             return 0
         dpg.set_value(ui['l']['status_info'],"Invalid Stock!")
         return -1
@@ -69,7 +68,7 @@ def add_investment():
                 ui['b']['qtym'] = dpg.add_button(label="-",callback=lambda:qtyupdate(-1))
             with dpg.group(tag='price',horizontal=True):
                 ui['i']['price'] = dpg.add_input_text(hint='Buy Price',width=200,decimal=True)
-                ui['b']['pricecheck'] = dpg.add_button(label="Get Current Price",width=200,callback=pricefetch)
+                ui['b']['pricecheck'] = dpg.add_button(label="Get Current Price",width=200,callback=lambda:pricefetch())
             with dpg.group(tag='buttons',horizontal=True,horizontal_spacing=208):
                 ui['b']['cancel'] = dpg.add_button(label="Cancel",width=100,callback=lambda:config.window_handler("popup",None,ui['g'],popup=True))
                 ui['b']['add'] = dpg.add_button(label="Add",width=100,callback=add_stock)
