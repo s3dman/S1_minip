@@ -19,7 +19,7 @@ def add_investment():
             dpg.set_value(ui['l']['status_info'],"")
             if pset:
                 dpg.set_value(ui['i']['price'],
-                    data_fetch.stock_info(dpg.get_value(ui['i']['stockname']))["Current Price"][1:])
+                    data_fetch.stock_info(dpg.get_value(ui['i']['stockname']))["Current Price"][1:],False)
             return 0
         dpg.set_value(ui['l']['status_info'],"Invalid Stock!")
         return -1
@@ -107,13 +107,20 @@ def overallinfoupdate(ui):
         return -1
     bprice,cprice,pcprice = 0,0,0
     for i in user_data:
-        df = data_fetch.stock_info(i[0])
+        df = data_fetch.stock_info(i[0],False)
         cprice += float(df["Current Price"][1:])*i[1]
         pcprice += float(df["Previous Close"][1:])*i[1]
         bprice += i[1]*i[2]
     dgainp,tgainp = cprice-pcprice,cprice-bprice
+
+    # dcolor,tcolor = [0,255,0],[0,255,0]
+    # if dgainp<0:
+    #     dcolor = [255,0,0]
+    # if tgainp<0:
+    #     tcolor = [255,0,0]
+
     dpg.set_value(ui['l']['daygain'],f"Day Gain/Loss: {dgainp:.3f}$ ({dgainp/bprice*100:.3f}%)")
-    dpg.set_value(ui['l']['totalgain'],f"Total Gain/Loss: {tgainp:.3f}$ ({tgainp/bprice*100:.3f}%)") 
+    dpg.set_value(ui['l']['totalgain'],f"Total Gain/Loss: {tgainp:.3f}$ ({tgainp/bprice*100:.3f}%)")
     dpg.set_value(ui['l']['numinvestments'],f"Investment's: {len(user_data)}")
 
 def delete_investment(source):
@@ -160,8 +167,8 @@ def portfoliopage():
                 dpg.add_line_series(x=[],y=[],parent='yaxis',tag='series')
                 multithread.run_parallel(graphupdate)
         with dpg.group(tag='overallinfo',pos=(100,520)):
-            ui['l']['daygain'] = dpg.add_text("Day Gain:")
-            ui['l']['totalgain'] = dpg.add_text("Total Gain:")
+            ui['l']['daygain'] = dpg.add_text("Day Gain:",color=[255,255,255])
+            ui['l']['totalgain'] = dpg.add_text("Total Gain:",color=[255,255,255])
             ui['l']['numinvestments'] = dpg.add_text("Invesments:")
             dpg.add_spacer(height=20)
             ui['b']['addinvestment'] = dpg.add_button(label="Add Investment",width=200,callback=add_investment)

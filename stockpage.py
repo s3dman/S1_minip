@@ -42,7 +42,7 @@ def info_print():
         with dpg.table(tag='summary',borders_outerH=True,borders_outerV=True,width=800,height=170,header_row=False,scrollY=True):
             dpg.add_table_column()
             with dpg.table_row():
-                dpg.add_text(temp["Summary"],wrap=800)
+                dpg.add_text(temp["Summary"],wrap=750)
 
 def stockpage():
     db = local_dh.SymbolGet()
