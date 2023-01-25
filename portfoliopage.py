@@ -117,7 +117,7 @@ def overallinfoupdate(ui):
     # if dgainp<0:
     #     dcolor = [255,0,0]
     # if tgainp<0:
-    #     tcolor = [255,0,0]
+    #    tcolor = [255,0,0]
 
     dpg.set_value(ui['l']['daygain'],f"Day Gain/Loss: {dgainp:.3f}$ ({dgainp/bprice*100:.3f}%)")
     dpg.set_value(ui['l']['totalgain'],f"Total Gain/Loss: {tgainp:.3f}$ ({tgainp/bprice*100:.3f}%)")
