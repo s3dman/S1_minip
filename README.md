@@ -1,12 +1,3 @@
-- symbolgetfunction update
-- stock data download and store
+# UE22CS151A Mini Project
 
-- add investment verify button for stock name
-- qty add
-- price fetch for day high similar to verify button
-
-- user data handling
-- username get
-
-- password reset
-- easter eggs
+Stock portfolio management program written in python.
